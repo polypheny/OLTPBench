@@ -35,7 +35,8 @@ public abstract class SmallBankConstants {
     public static final String TABLENAME_SAVINGS    = "SAVINGS";
     public static final String TABLENAME_CHECKING   = "CHECKING";
     
-    public static final int BATCH_SIZE              = 5000;
+    public static final int BATCH_SIZE              = 1000;
+    public static final int THREAD_BATCH_SIZE       = 100000;
     
     // ----------------------------------------------------------------
     // ACCOUNT INFORMATION

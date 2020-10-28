@@ -31,6 +31,8 @@ public class SmallBankLoader extends Loader<SmallBankBenchmark> {
     
     private final long numAccounts;
     private final int custNameLength;
+
+    private final int numLoaderThreads;
     
     public SmallBankLoader(SmallBankBenchmark benchmark) {
         super(benchmark);
@@ -48,18 +50,23 @@ public class SmallBankLoader extends Loader<SmallBankBenchmark> {
         
         this.numAccounts = benchmark.numAccounts;
         this.custNameLength = SmallBankBenchmark.getCustomerNameLength(this.catalogAccts);
+
+        this.numLoaderThreads = (int) Math.min(1, this.benchmark.getWorkloadConfiguration().getXmlConfig().getLong("loaderThreads", (this.numAccounts / SmallBankConstants.THREAD_BATCH_SIZE) + 1L));
     }
 
     @Override
     public List<LoaderThread> createLoaderThreads() throws SQLException {
         List<LoaderThread> threads = new ArrayList<LoaderThread>();
-        int batchSize = 100000;
+
+        final long numAccountsPerThread = this.numAccounts / this.numLoaderThreads;
+
         long start = 0;
         while (start < this.numAccounts) {
-            long stop = Math.min(start + batchSize, this.numAccounts);
+            long stop = Math.min(start + numAccountsPerThread, this.numAccounts);
             threads.add(new Generator(start, stop));
             start = stop;
         }
+
         return (threads);
     }
     
@@ -130,7 +137,6 @@ public class SmallBankLoader extends Loader<SmallBankBenchmark> {
             this.stmtSavings.executeBatch();
             this.stmtChecking.executeBatch();
             conn.commit();
-            
         }
     };
 
