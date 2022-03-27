@@ -17,6 +17,8 @@ Please consult the documentation of the original repository on how to further us
 
 ### Supported Benchmarks for Polypheny
 #### [Polypheny-DB](https://github.com/polypheny/Polypheny-DB)
+* [AuctionMark](./config/polypheny-db/auctionmark.xml)\
+  `./bin/oltpbenchmark -b auctionmark -c ./config/polypheny-db/auctionmark.xml --create=true --load=true --execute=true`
 * [SmallBank](./config/polypheny-db/smallbank.xml)\
   `./bin/oltpbenchmark -b smallbank -c ./config/polypheny-db/smallbank.xml --create=true --load=true --execute=true`
 * [TPC-C](./config/polypheny-db/tpcc.xml)\
@@ -76,7 +78,7 @@ benchmark, leveraging all the system features (logging, controlled speed, contro
 
 ## Dependencies
 
-+ Java (+1.7)
++ Java (+1.8)
 + Apache Ant
 
 ## Quick Start
