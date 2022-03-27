@@ -65,7 +65,7 @@ dependencies {
     implementation 'org.slf4j:slf4j-simple:1.7.5'
     implementation 'org.xerial:sqlite-jdbc:3.7.2'
 
-    implementation 'org.polypheny:polypheny-jdbc-driver:1.4'
+    implementation 'org.polypheny:polypheny-jdbc-driver:1.5.2'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
