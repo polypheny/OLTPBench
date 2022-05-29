@@ -18,13 +18,10 @@
 package com.oltpbenchmark.benchmarks.auctionmark.util;
 
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.TreeMap;
-
 import org.apache.log4j.Logger;
-
-import com.oltpbenchmark.util.FileUtil;
 
 
 public class CategoryParser {
@@ -34,18 +31,18 @@ public class CategoryParser {
 	private int _nextCategoryID;
 	String _fileName;
 
-	public CategoryParser(File file) {
+	public CategoryParser(InputStreamReader reader) {
 	
 		_categoryMap = new TreeMap<String, Category>();
 		_nextCategoryID = 0;
 		
 		
 		try {
-			BufferedReader br = FileUtil.getReader(file);
+			BufferedReader br = new BufferedReader(reader);
 			String strLine;
-			while ((strLine = br.readLine()) != null) {		
-				extractCategory(strLine);
+			while ((strLine = br.readLine()) != null) {
 				//System.out.println(strLine);
+				extractCategory(strLine);
 			}
 		} catch (Exception ex) {
 		    throw new RuntimeException("Failed to load in category file", ex);
@@ -111,16 +108,7 @@ public class CategoryParser {
 		return category;
 	}
 	
-	public Map<String, Category> getCategoryMap(){
+	public Map<String, Category> getCategoryMap() {
 		return _categoryMap;
-	}
-	
-	public static void main(String args[]) throws Exception {	
-		CategoryParser ebp = new CategoryParser(new File("bin/edu/brown/benchmark/auctionmark/data/categories.txt"));
-		
-		for (String key : ebp.getCategoryMap().keySet()){
-			LOG.info(key + " : " + ebp.getCategoryMap().get(key).getCategoryID() + " : " + ebp.getCategoryMap().get(key).getParentCategoryID() + " : " + ebp.getCategoryMap().get(key).getItemCount());
-		}
-		//addNewCategory("001/123456/789", 0, true);
 	}
 }
