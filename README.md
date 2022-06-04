@@ -17,15 +17,15 @@ Please consult the documentation of the original repository on how to further us
 
 ### Supported Benchmarks for Polypheny
 #### [Polypheny-DB](https://github.com/polypheny/Polypheny-DB)
-* [AuctionMark](./config/polypheny-db/auctionmark.xml)\
+* [AuctionMark](./config/polypheny/auctionmark.xml)\
   `./bin/oltpbenchmark -b auctionmark -c ./config/polypheny-db/auctionmark.xml --create=true --load=true --execute=true`
-* [SmallBank](./config/polypheny-db/smallbank.xml)\
+* [SmallBank](./config/polypheny/smallbank.xml)\
   `./bin/oltpbenchmark -b smallbank -c ./config/polypheny-db/smallbank.xml --create=true --load=true --execute=true`
-* [TPC-C](./config/polypheny-db/tpcc.xml)\
+* [TPC-C](./config/polypheny/tpcc.xml)\
   `./bin/oltpbenchmark -b tpcc -c ./config/polypheny-db/tpcc.xml --create=true --load=true --execute=true`
-* [TPC-H](./config/polypheny-db/tpch.xml)\
+* [TPC-H](./config/polypheny/tpch.xml)\
   `./bin/oltpbenchmark -b tpch -c ./config/polypheny-db/tpch.xml --create=true --load=true --execute=true`
-* [YCSB](./config/polypheny-db/ycsb.xml)\
+* [YCSB](./config/polypheny/ycsb.xml)\
   `./bin/oltpbenchmark -b ycsb -c ./config/polypheny-db/ycsb.xml --create=true --load=true --execute=true`
 
 #### [Polypheny-FRAM](https://github.com/polypheny/Polypheny-FRAM)

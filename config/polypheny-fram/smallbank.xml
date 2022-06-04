@@ -9,7 +9,9 @@
 
     <isolation>TRANSACTION_SERIALIZABLE</isolation>
     <batchsize>128</batchsize>
-    
+
+    <ddlFileName>smallbank-polypheny-fram-ddl.sql</ddlFileName>
+
     <scalefactor>1</scalefactor>
     
     <!-- The workload -->
