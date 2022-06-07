@@ -9,42 +9,47 @@
     <username>pa</username>
     <password></password>
 
-    <ddlFileName>smallbank-polypheny-db-ddl.sql</ddlFileName>
+    <!-- Use this file present in the tpcc/ddls folder -->
+    <!-- The name needs to start with "<benchmark>-<dbtype>" and end with "-ddl.sql". -->
+    <ddlFileName>tpcc-polypheny-ddl.sql</ddlFileName>
+
+    <!-- Use this file present in the tpcc/dialects folder -->
+    <!-- The name needs to end with "-dialects.xml". -->
+    <dialectFileName></dialectFileName>
 
     <isolation>TRANSACTION_SERIALIZABLE</isolation>
     <batchsize>128</batchsize>
-    
+
+    <!-- Scale factor is the number of warehouses in TPCC -->
     <scalefactor>1</scalefactor>
-    
+
     <!-- The workload -->
     <terminals>1</terminals>
     <works>
         <work>
-          <time>60</time>
-          <rate>unlimited</rate>
-          <weights>15,15,15,25,15,15</weights>
+            <!-- <serial>false</serial> -->
+            <time>60</time>
+            <rate>unlimited</rate>
+            <weights>45,43,4,4,4</weights>
         </work>
     </works>
-        
-    <!-- SmallBank Procedures declaration -->
+
+    <!-- TPCC specific -->
     <transactiontypes>
         <transactiontype>
-            <name>Amalgamate</name>
+            <name>NewOrder</name>
         </transactiontype>
         <transactiontype>
-            <name>Balance</name>
+            <name>Payment</name>
         </transactiontype>
         <transactiontype>
-            <name>DepositChecking</name>
+            <name>OrderStatus</name>
         </transactiontype>
         <transactiontype>
-            <name>SendPayment</name>
+            <name>Delivery</name>
         </transactiontype>
         <transactiontype>
-            <name>TransactSavings</name>
-        </transactiontype>
-        <transactiontype>
-            <name>WriteCheck</name>
+            <name>StockLevel</name>
         </transactiontype>
     </transactiontypes>
 </parameters>

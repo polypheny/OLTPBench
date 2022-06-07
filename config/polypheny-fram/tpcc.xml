@@ -10,6 +10,10 @@
     <isolation>TRANSACTION_SERIALIZABLE</isolation>
     <batchsize>128</batchsize>
 
+    <!-- Use this file present in the tpcc/ddls folder -->
+    <!-- The name needs to start with "<benchmark>-<dbtype>" and end with "-ddl.sql". -->
+    <ddlFileName>tpcc-polypheny-fram-ddl.sql</ddlFileName>
+
     <!-- Scale factor is the number of warehouses in TPCC -->
     <scalefactor>1</scalefactor>
 

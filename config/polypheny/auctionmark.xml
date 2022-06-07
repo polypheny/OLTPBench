@@ -16,6 +16,8 @@
     <!-- Scalefactor in AuctionMark scales by *1000 the number of customers-->
     <scalefactor>10</scalefactor>
 
+    <dialectFileName>polypheny-dialects.xml</dialectFileName>
+
     <!-- The workload -->
     <terminals>1</terminals>
     <works>

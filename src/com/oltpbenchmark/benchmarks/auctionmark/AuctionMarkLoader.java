@@ -16,31 +16,6 @@
 
 package com.oltpbenchmark.benchmarks.auctionmark;
 
-import java.io.File;
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
-
-import org.apache.commons.collections15.CollectionUtils;
-import org.apache.commons.collections15.map.ListOrderedMap;
-import org.apache.log4j.Logger;
-
 import com.oltpbenchmark.api.Loader;
 import com.oltpbenchmark.benchmarks.auctionmark.util.Category;
 import com.oltpbenchmark.benchmarks.auctionmark.util.CategoryParser;
@@ -60,6 +35,32 @@ import com.oltpbenchmark.util.Pair;
 import com.oltpbenchmark.util.RandomDistribution.Flat;
 import com.oltpbenchmark.util.RandomDistribution.Zipf;
 import com.oltpbenchmark.util.SQLUtil;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
+import org.apache.commons.collections15.CollectionUtils;
+import org.apache.commons.collections15.map.ListOrderedMap;
+import org.apache.log4j.Logger;
 
 /**
  * @author pavlo
@@ -86,7 +87,7 @@ public class AuctionMarkLoader extends Loader<AuctionMarkBenchmark> {
 
     private final Histogram<String> tableSizes = new Histogram<String>();
 
-    private final File category_file;
+    private final InputStreamReader category_reader;
 
     private boolean fail = false;
 
@@ -96,8 +97,6 @@ public class AuctionMarkLoader extends Loader<AuctionMarkBenchmark> {
 
     /**
      * Constructor
-     * 
-     * @param args
      */
     public AuctionMarkLoader(AuctionMarkBenchmark benchmark) {
         super(benchmark);
@@ -105,7 +104,11 @@ public class AuctionMarkLoader extends Loader<AuctionMarkBenchmark> {
         // BenchmarkProfile
         this.profile = new AuctionMarkProfile(benchmark, benchmark.getRandomGenerator());
 
-        this.category_file = new File(benchmark.getDataDir().getAbsolutePath() + "/table.category.gz");
+        try {
+            this.category_reader = new InputStreamReader( new GZIPInputStream(AuctionMarkBenchmark.class.getResourceAsStream( "data/table.category.gz" )), StandardCharsets.UTF_8 ); // new File(benchmark.getDataDir().getAbsolutePath() + "/table.category.gz");
+        } catch ( IOException e ) {
+            throw new RuntimeException( e );
+        }
 
         try {
             // ---------------------------
@@ -113,7 +116,7 @@ public class AuctionMarkLoader extends Loader<AuctionMarkBenchmark> {
             // ---------------------------
 
             this.registerGenerator(new RegionGenerator());
-            this.registerGenerator(new CategoryGenerator(category_file));
+            this.registerGenerator(new CategoryGenerator(category_reader));
             this.registerGenerator(new GlobalAttributeGroupGenerator());
             this.registerGenerator(new GlobalAttributeValueGenerator());
 
@@ -322,7 +325,6 @@ public class AuctionMarkLoader extends Loader<AuctionMarkBenchmark> {
 
         /**
          * Constructor
-         * @param catalog_tbl
          */
         public AbstractTableGenerator(String tableName, String...dependencies) throws SQLException {
             super();
@@ -712,17 +714,14 @@ public class AuctionMarkLoader extends Loader<AuctionMarkBenchmark> {
      * CATEGORY Generator
      **********************************************************************************************/
     protected class CategoryGenerator extends AbstractTableGenerator {
-        private final File data_file;
+        private final InputStreamReader reader;
         private final Map<String, Category> categoryMap;
         private final LinkedList<Category> categories = new LinkedList<Category>();
 
-        public CategoryGenerator(File data_file) throws SQLException {
+        public CategoryGenerator( InputStreamReader reader) throws SQLException {
             super(AuctionMarkConstants.TABLENAME_CATEGORY);
-            this.data_file = data_file;
-            assert(this.data_file.exists()) : 
-                "The data file for the category generator does not exist: " + this.data_file;
-
-            this.categoryMap = (new CategoryParser(data_file)).getCategoryMap();
+            this.reader = reader;
+            this.categoryMap = (new CategoryParser(reader)).getCategoryMap();
             this.tableSize = (long)this.categoryMap.size();
         }
 

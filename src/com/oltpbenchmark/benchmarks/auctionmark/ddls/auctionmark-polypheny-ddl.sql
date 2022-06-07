@@ -68,14 +68,14 @@ CREATE TABLE useracct (
     u_sattr5            VARCHAR(64),
     u_sattr6            VARCHAR(64),
     u_sattr7            VARCHAR(64),
-    u_iattr0            BIGINT DEFAULT NULL,
-    u_iattr1            BIGINT DEFAULT NULL,
-    u_iattr2            BIGINT DEFAULT NULL,
-    u_iattr3            BIGINT DEFAULT NULL,
-    u_iattr4            BIGINT DEFAULT NULL,
-    u_iattr5            BIGINT DEFAULT NULL,
-    u_iattr6            BIGINT DEFAULT NULL,
-    u_iattr7            BIGINT DEFAULT NULL, 
+    u_iattr0            BIGINT NULL,
+    u_iattr1            BIGINT NULL,
+    u_iattr2            BIGINT NULL,
+    u_iattr3            BIGINT NULL,
+    u_iattr4            BIGINT NULL,
+    u_iattr5            BIGINT NULL,
+    u_iattr6            BIGINT NULL,
+    u_iattr7            BIGINT NULL,
     PRIMARY KEY (u_id)
 );
 ALTER TABLE useracct ADD CONSTRAINT C_FKEY_USERACCT_REGION FOREIGN KEY (u_r_id) REFERENCES region (r_id) ON DELETE RESTRICT;
@@ -166,7 +166,7 @@ CREATE TABLE item (
     i_c_id              BIGINT NOT NULL,
     i_name              VARCHAR(100),
     i_description       VARCHAR(1024),
-    i_user_attributes   VARCHAR(255) DEFAULT NULL,
+    i_user_attributes   VARCHAR(255) NULL,
     i_initial_price     REAL NOT NULL,
     i_current_price     REAL NOT NULL,
     i_num_bids          BIGINT,
@@ -178,14 +178,14 @@ CREATE TABLE item (
     i_status            INTEGER DEFAULT 0,
     i_created           TIMESTAMP,
     i_updated           TIMESTAMP,
-    i_iattr0            BIGINT DEFAULT NULL,
-    i_iattr1            BIGINT DEFAULT NULL,
-    i_iattr2            BIGINT DEFAULT NULL,
-    i_iattr3            BIGINT DEFAULT NULL,
-    i_iattr4            BIGINT DEFAULT NULL,
-    i_iattr5            BIGINT DEFAULT NULL,
-    i_iattr6            BIGINT DEFAULT NULL,
-    i_iattr7            BIGINT DEFAULT NULL, 
+    i_iattr0            BIGINT NULL,
+    i_iattr1            BIGINT NULL,
+    i_iattr2            BIGINT NULL,
+    i_iattr3            BIGINT NULL,
+    i_iattr4            BIGINT NULL,
+    i_iattr5            BIGINT NULL,
+    i_iattr6            BIGINT NULL,
+    i_iattr7            BIGINT NULL,
     PRIMARY KEY (i_id, i_u_id)
 );
 ALTER TABLE item ADD CONSTRAINT C_FKEY_ITEM_ACCT FOREIGN KEY (i_u_id) REFERENCES useracct (u_id) ON DELETE RESTRICT;
@@ -205,7 +205,7 @@ CREATE TABLE item_attribute (
     ia_u_id             BIGINT NOT NULL,
     ia_gav_id           BIGINT NOT NULL,
     ia_gag_id           BIGINT NOT NULL,
-    ia_sattr0           VARCHAR(64) DEFAULT NULL,
+    ia_sattr0           VARCHAR(64) NULL,
     PRIMARY KEY (ia_id, ia_i_id, ia_u_id)
 );
 ALTER TABLE item_attribute ADD CONSTRAINT C_FKEY_ITEM_ATTRIBUTE_ITEM FOREIGN KEY (ia_i_id, ia_u_id) REFERENCES item (i_id, i_u_id) ON DELETE RESTRICT;
@@ -243,7 +243,7 @@ CREATE TABLE item_comment (
     ic_u_id             BIGINT NOT NULL,
     ic_buyer_id         BIGINT NOT NULL,
     ic_question         VARCHAR(128) NOT NULL,
-    ic_response         VARCHAR(128) DEFAULT NULL,
+    ic_response         VARCHAR(128) NULL,
     ic_created          TIMESTAMP,
     ic_updated          TIMESTAMP,
     PRIMARY KEY (ic_id, ic_i_id, ic_u_id)

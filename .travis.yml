@@ -11,8 +11,8 @@ cache:
 # openjdk9 + oraclejdk10 were both removed from Ubuntu
 language: java
 jdk:
+  - openjdk17
   - openjdk11
-  - openjdk10
   - openjdk8
 #  - oraclejdk8
 
