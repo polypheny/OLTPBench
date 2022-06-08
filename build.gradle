@@ -20,8 +20,7 @@ java {
 
 repositories {
     mavenCentral()
-    jcenter()
-    maven { url 'https://nexus.dmi.unibas.ch/repository/maven2/' }
+    //maven { url 'https://nexus.dmi.unibas.ch/repository/maven2/' }
 }
 
 
@@ -48,9 +47,9 @@ dependencies {
     implementation 'net.sourceforge.collections:collections-generic:4.01'
     implementation 'net.sourceforge.jtds:jtds:1.2.6'
     implementation 'org.apache.commons:commons-math3:3.0'
-    implementation 'org.apache.httpcomponents:httpclient:4.3.6'
-    implementation 'org.apache.httpcomponents:httpcore:4.3.3'
-    implementation 'org.apache.httpcomponents:httpmime:4.3.6'
+    implementation 'org.apache.httpcomponents:httpclient:4.4.1'
+    implementation 'org.apache.httpcomponents:httpcore:4.4.13'
+    implementation 'org.apache.httpcomponents:httpmime:4.4.1'
     implementation('org.apache.openjpa:openjpa-persistence-jdbc:1.0.4') {
         exclude group: 'hsqldb', module: 'hsqldb'
     }
