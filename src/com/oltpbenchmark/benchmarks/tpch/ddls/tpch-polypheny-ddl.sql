@@ -13,11 +13,15 @@ CREATE TABLE nation  ( n_nationkey  INTEGER NOT NULL,
                        n_regionkey  INTEGER NOT NULL,
                        n_comment    VARCHAR(152),
                        PRIMARY KEY (n_nationkey) );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE nation ADD INDEX IDX_NATION_PK ON (n_nationkey);
 
 CREATE TABLE region  ( r_regionkey  INTEGER NOT NULL,
                        r_name       VARCHAR(25) NOT NULL,
                        r_comment    VARCHAR(152),
                        PRIMARY KEY (r_regionkey) );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE region ADD INDEX IDX_REGION_PK ON (r_regionkey);
 
 CREATE TABLE part  ( p_partkey     INTEGER NOT NULL,
                      p_name        VARCHAR(55) NOT NULL,
@@ -29,6 +33,8 @@ CREATE TABLE part  ( p_partkey     INTEGER NOT NULL,
                      p_retailprice DECIMAL(15,2) NOT NULL,
                      p_comment     VARCHAR(23) NOT NULL,
                      PRIMARY KEY (p_partkey) );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE part ADD INDEX IDX_PART_PK ON (p_partkey);
 
 CREATE TABLE supplier ( s_suppkey     INTEGER NOT NULL,
                         s_name        VARCHAR(25) NOT NULL,
@@ -38,6 +44,8 @@ CREATE TABLE supplier ( s_suppkey     INTEGER NOT NULL,
                         s_acctbal     DECIMAL(15,2) NOT NULL,
                         s_comment     VARCHAR(101) NOT NULL,
                         PRIMARY KEY (s_suppkey) );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE supplier ADD INDEX IDX_SUPPLIER_PK ON (s_suppkey);
 
 CREATE TABLE partsupp ( ps_partkey     INTEGER NOT NULL,
                         ps_suppkey     INTEGER NOT NULL,
@@ -45,6 +53,8 @@ CREATE TABLE partsupp ( ps_partkey     INTEGER NOT NULL,
                         ps_supplycost  DECIMAL(15,2)  NOT NULL,
                         ps_comment     VARCHAR(199) NOT NULL,
                         PRIMARY KEY (ps_partkey, ps_suppkey) );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE partsupp ADD INDEX IDX_PARTSUPP_PK ON (ps_partkey, ps_suppkey);
 
 CREATE TABLE customer ( c_custkey     INTEGER NOT NULL,
                         c_name        VARCHAR(25) NOT NULL,
@@ -55,6 +65,8 @@ CREATE TABLE customer ( c_custkey     INTEGER NOT NULL,
                         c_mktsegment  VARCHAR(10) NOT NULL,
                         c_comment     VARCHAR(117) NOT NULL,
                         PRIMARY KEY (c_custkey) );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE customer ADD INDEX IDX_CUSTOMER_PK ON (c_custkey);
 
 CREATE TABLE orders  ( o_orderkey       INTEGER NOT NULL,
                        o_custkey        INTEGER NOT NULL,
@@ -66,6 +78,8 @@ CREATE TABLE orders  ( o_orderkey       INTEGER NOT NULL,
                        o_shippriority   INTEGER NOT NULL,
                        o_comment        VARCHAR(79) NOT NULL,
                        PRIMARY KEY (o_orderkey) );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE orders ADD INDEX IDX_ORDERS_PK ON (o_orderkey);
 
 CREATE TABLE lineitem ( l_orderkey    INTEGER NOT NULL,
                         l_partkey     INTEGER NOT NULL,
@@ -84,4 +98,5 @@ CREATE TABLE lineitem ( l_orderkey    INTEGER NOT NULL,
                         l_shipmode     VARCHAR(10) NOT NULL,
                         l_comment      VARCHAR(44) NOT NULL,
                         PRIMARY KEY (l_orderkey, l_linenumber) );
-
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE lineitem ADD INDEX IDX_LINEITEM_PK ON (l_orderkey, l_linenumber);

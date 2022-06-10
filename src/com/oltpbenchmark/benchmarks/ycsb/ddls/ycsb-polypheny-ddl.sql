@@ -13,3 +13,5 @@ CREATE TABLE USERTABLE (
   	FIELD10 VARCHAR(100),
   	PRIMARY KEY (YCSB_KEY)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE USERTABLE ADD INDEX IDX_YCSB_KEY ON (YCSB_KEY);

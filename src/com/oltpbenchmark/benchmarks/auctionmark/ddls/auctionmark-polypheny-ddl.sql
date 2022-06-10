@@ -26,6 +26,8 @@ CREATE TABLE config_profile (
     cfp_user_item_histogram     VARCHAR(12000) NOT NULL,
     PRIMARY KEY (cfp_scale_factor,cfp_loader_start,cfp_loader_stop)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE config_profile ADD INDEX IDX_CP_PK ON (cfp_scale_factor,cfp_loader_start,cfp_loader_stop);
 
 -- ================================================================
 -- REGION
@@ -38,6 +40,8 @@ CREATE TABLE region (
     r_name              VARCHAR(32),
     PRIMARY KEY (r_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE region ADD INDEX IDX_REGION_PK ON (r_id);
 
 -- ================================================================
 -- USERACCT
@@ -78,6 +82,9 @@ CREATE TABLE useracct (
     u_iattr7            BIGINT NULL,
     PRIMARY KEY (u_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE useracct ADD INDEX IDX_UA_PK ON (u_id);
+
 ALTER TABLE useracct ADD CONSTRAINT C_FKEY_USERACCT_REGION FOREIGN KEY (u_r_id) REFERENCES region (r_id) ON DELETE RESTRICT;
 ALTER TABLE useracct ADD INDEX IDX_USERACCT_REGION ON (u_id, u_r_id);
 
@@ -93,6 +100,9 @@ CREATE TABLE useracct_attributes (
     u_created           TIMESTAMP,
     PRIMARY KEY (ua_id, ua_u_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE useracct_attributes ADD INDEX IDX_UAA_PK ON (ua_id, ua_u_id);
+
 ALTER TABLE useracct_attributes ADD CONSTRAINT C_FKEY_USERACCT_ATTRIBUTES FOREIGN KEY (ua_u_id) REFERENCES useracct (u_id) ON DELETE RESTRICT;
 
 -- ================================================================
@@ -108,6 +118,9 @@ CREATE TABLE category (
     c_parent_id         BIGINT,
     PRIMARY KEY (c_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE category ADD INDEX IDX_C_PK ON (c_id);
+
 ALTER TABLE category ADD CONSTRAINT C_FKEY_CATEGORY FOREIGN KEY (c_parent_id) REFERENCES category (c_id) ON DELETE RESTRICT;
 ALTER TABLE category ADD INDEX IDX_CATEGORY_PARENT ON (c_parent_id);
 
@@ -124,6 +137,9 @@ CREATE TABLE global_attribute_group (
     gag_name            VARCHAR(100) NOT NULL,
     PRIMARY KEY (gag_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE global_attribute_group ADD INDEX IDX_GAG_PK ON (gag_id);
+
 ALTER TABLE global_attribute_group ADD CONSTRAINT C_FKEY_ATTRIBUTE_GROUP FOREIGN KEY (gag_c_id) REFERENCES category (c_id) ON DELETE RESTRICT;
 
 -- ================================================================
@@ -140,6 +156,9 @@ CREATE TABLE global_attribute_value (
     gav_name            VARCHAR(100) NOT NULL,
     PRIMARY KEY (gav_id, gav_gag_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE global_attribute_value ADD INDEX IDX_GAV_PK ON (gav_id, gav_gag_id);
+
 ALTER TABLE global_attribute_value ADD CONSTRAINT C_FKEY_ATTRIBUTE_VALUE FOREIGN KEY (gav_gag_id) REFERENCES global_attribute_group (gag_id) ON DELETE RESTRICT;
 
 -- ================================================================
@@ -188,6 +207,9 @@ CREATE TABLE item (
     i_iattr7            BIGINT NULL,
     PRIMARY KEY (i_id, i_u_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE item ADD INDEX IDX_I_PK ON (i_id, i_u_id);
+
 ALTER TABLE item ADD CONSTRAINT C_FKEY_ITEM_ACCT FOREIGN KEY (i_u_id) REFERENCES useracct (u_id) ON DELETE RESTRICT;
 ALTER TABLE item ADD CONSTRAINT C_FKEY_ITEM_CAT FOREIGN KEY (i_c_id) REFERENCES category (c_id) ON DELETE RESTRICT;
 ALTER TABLE item ADD INDEX IDX_ITEM_SELLER ON (i_u_id);
@@ -208,6 +230,9 @@ CREATE TABLE item_attribute (
     ia_sattr0           VARCHAR(64) NULL,
     PRIMARY KEY (ia_id, ia_i_id, ia_u_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE item_attribute ADD INDEX IDX_IA_PK ON (ia_id, ia_i_id, ia_u_id);
+
 ALTER TABLE item_attribute ADD CONSTRAINT C_FKEY_ITEM_ATTRIBUTE_ITEM FOREIGN KEY (ia_i_id, ia_u_id) REFERENCES item (i_id, i_u_id) ON DELETE RESTRICT;
 ALTER TABLE item_attribute ADD CONSTRAINT C_FKEY_ITEM_ATTRIBUTE_GLOBAL_ATT FOREIGN KEY (ia_gav_id, ia_gag_id) REFERENCES global_attribute_value (gav_id, gav_gag_id) ON DELETE RESTRICT;
 
@@ -225,6 +250,9 @@ CREATE TABLE item_image (
     ii_sattr0            VARCHAR(128) NOT NULL,
     PRIMARY KEY (ii_id, ii_i_id, ii_u_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE item_image ADD INDEX IDX_II_PK ON (ii_id, ii_i_id, ii_u_id);
+
 ALTER TABLE item_image ADD CONSTRAINT C_FKEY_ITEM_IMAGE FOREIGN KEY (ii_i_id, ii_u_id) REFERENCES item (i_id, i_u_id) ON DELETE RESTRICT;
 
 -- ================================================================
@@ -248,6 +276,9 @@ CREATE TABLE item_comment (
     ic_updated          TIMESTAMP,
     PRIMARY KEY (ic_id, ic_i_id, ic_u_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE item_comment ADD INDEX IDX_IC_PK ON (ic_id, ic_i_id, ic_u_id);
+
 ALTER TABLE item_comment ADD CONSTRAINT C_FKEY_ITEM_COMMENT_BUYER FOREIGN KEY (ic_buyer_id) REFERENCES useracct (u_id) ON DELETE RESTRICT;
 ALTER TABLE item_comment ADD CONSTRAINT C_FKEY_ITEM_COMMENT FOREIGN KEY (ic_i_id, ic_u_id) REFERENCES item (i_id, i_u_id) ON DELETE RESTRICT;
 -- CREATE INDEX IDX_ITEM_COMMENT ON "ITEM_COMMENT" (ic_i_id, ic_u_id);
@@ -274,6 +305,9 @@ CREATE TABLE item_bid (
     ib_updated          TIMESTAMP,
     PRIMARY KEY (ib_id, ib_i_id, ib_u_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE item_bid ADD INDEX IDX_IB_PK ON (ib_id, ib_i_id, ib_u_id);
+
 ALTER TABLE item_bid ADD CONSTRAINT C_FKEY_ITEM_BID_BUYER FOREIGN KEY (ib_buyer_id) REFERENCES useracct (u_id) ON DELETE RESTRICT;
 ALTER TABLE item_bid ADD CONSTRAINT C_FKEY_ITEM_BID FOREIGN KEY (ib_i_id, ib_u_id) REFERENCES item (i_id, i_u_id) ON DELETE RESTRICT;
 
@@ -291,6 +325,9 @@ CREATE TABLE item_max_bid (
     imb_updated         TIMESTAMP,
     PRIMARY KEY (imb_i_id, imb_u_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE item_max_bid ADD INDEX IDX_IMB_PK ON (imb_i_id, imb_u_id);
+
 ALTER TABLE item_max_bid ADD CONSTRAINT C_FKEY_ITEM_MAX_BID_ITEM FOREIGN KEY (imb_i_id, imb_u_id) REFERENCES item (i_id, i_u_id) ON DELETE RESTRICT;
 ALTER TABLE item_max_bid ADD CONSTRAINT C_FKEY_ITEM_MAX_BID_ITEM_BID FOREIGN KEY (imb_ib_id, imb_ib_i_id, imb_ib_u_id) REFERENCES item_bid (ib_id, ib_i_id, ib_u_id) ON DELETE RESTRICT;
 
@@ -309,6 +346,9 @@ CREATE TABLE item_purchase (
     ip_date             TIMESTAMP,
     PRIMARY KEY (ip_id, ip_ib_id, ip_ib_i_id, ip_ib_u_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE item_purchase ADD INDEX IDX_IP_PK ON (ip_id, ip_ib_id, ip_ib_i_id, ip_ib_u_id);
+
 ALTER TABLE item_purchase ADD CONSTRAINT C_FKEY_ITEM_PURCHASE FOREIGN KEY (ip_ib_id, ip_ib_i_id, ip_ib_u_id) REFERENCES item_bid (ib_id, ib_i_id, ib_u_id) ON DELETE RESTRICT;
 
 -- ================================================================
@@ -332,6 +372,9 @@ CREATE TABLE useracct_feedback (
     uf_sattr0           VARCHAR(80) NOT NULL,
     PRIMARY KEY (uf_u_id, uf_i_id, uf_i_u_id, uf_from_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE useracct_feedback ADD INDEX IDX_UAF_PK ON (uf_u_id, uf_i_id, uf_i_u_id, uf_from_id);
+
 ALTER TABLE useracct_feedback ADD CONSTRAINT C_FKEY_USERACCT_FEEDBACK1 FOREIGN KEY (uf_u_id) REFERENCES useracct (u_id) ON DELETE RESTRICT;
 ALTER TABLE useracct_feedback ADD CONSTRAINT C_FKEY_USERACCT_FEEDBACK2 FOREIGN KEY (uf_from_id) REFERENCES useracct (u_id) ON DELETE RESTRICT;
 ALTER TABLE useracct_feedback ADD CONSTRAINT C_FKEY_USERACCT_FEEDBACK3 FOREIGN KEY (uf_i_id, uf_i_u_id) REFERENCES item (i_id, i_u_id) ON DELETE RESTRICT;
@@ -351,6 +394,9 @@ CREATE TABLE useracct_item (
     ui_created          TIMESTAMP,
     PRIMARY KEY (ui_u_id, ui_i_id, ui_i_u_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE useracct_item ADD INDEX IDX_UAI_PK ON (ui_u_id, ui_i_id, ui_i_u_id);
+
 ALTER TABLE useracct_item ADD CONSTRAINT C_FKEY_USERACCT_ITEM1 FOREIGN KEY (ui_u_id) REFERENCES useracct (u_id) ON DELETE RESTRICT;
 ALTER TABLE useracct_item ADD CONSTRAINT C_FKEY_USERACCT_ITEM2 FOREIGN KEY (ui_i_id, ui_i_u_id) REFERENCES item (i_id, i_u_id) ON DELETE RESTRICT;
 ALTER TABLE useracct_item ADD CONSTRAINT C_FKEY_USERACCT_ITEM3 FOREIGN KEY (ui_ip_id, ui_ip_ib_id, ui_ip_ib_i_id, ui_ip_ib_u_id) REFERENCES item_purchase (ip_id, ip_ib_id, ip_ib_i_id, ip_ib_u_id) ON DELETE RESTRICT;
@@ -367,5 +413,8 @@ CREATE TABLE useracct_watch (
     uw_created          TIMESTAMP,
     PRIMARY KEY (uw_u_id, uw_i_id, uw_i_u_id)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE useracct_watch ADD INDEX IDX_UAW_PK ON (uw_u_id, uw_i_id, uw_i_u_id);
+
 ALTER TABLE useracct_watch ADD CONSTRAINT C_FKEY_USERACCT_WATCH1 FOREIGN KEY (uw_u_id) REFERENCES useracct (u_id) ON DELETE RESTRICT;
 ALTER TABLE useracct_watch ADD CONSTRAINT C_FKEY_USERACCT_WATCH2 FOREIGN KEY (uw_i_id, uw_i_u_id) REFERENCES item (i_id, i_u_id) ON DELETE RESTRICT;

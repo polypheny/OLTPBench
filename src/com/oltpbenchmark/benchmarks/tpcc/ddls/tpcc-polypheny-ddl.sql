@@ -21,6 +21,9 @@ CREATE TABLE WAREHOUSE (
   W_ZIP VARCHAR(9) NOT NULL,
   PRIMARY KEY (W_ID)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE WAREHOUSE ADD INDEX IDX_WAREHOUSE_PK ON (W_ID);
+
 
 CREATE TABLE DISTRICT (
   D_W_ID INT NOT NULL,
@@ -36,6 +39,8 @@ CREATE TABLE DISTRICT (
   D_ZIP VARCHAR(9) NOT NULL,
   PRIMARY KEY (D_W_ID,D_ID)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE DISTRICT ADD INDEX IDX_DISTRICT_PK ON (D_W_ID,D_ID);
 
 -- TODO: C_SINCE ON UPDATE CURRENT_TIMESTAMP,
 CREATE TABLE CUSTOMER (
@@ -62,6 +67,8 @@ CREATE TABLE CUSTOMER (
   C_DATA VARCHAR(500) NOT NULL,
   PRIMARY KEY (C_W_ID, C_D_ID, C_ID)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE CUSTOMER ADD INDEX IDX_CUSTOMER_PK ON (C_W_ID, C_D_ID, C_ID);
 
 -- TODO: O_ENTRY_D  ON UPDATE CURRENT_TIMESTAMP
 CREATE TABLE OORDER (
@@ -76,6 +83,10 @@ CREATE TABLE OORDER (
   PRIMARY KEY (O_W_ID,O_D_ID,O_ID),
   UNIQUE (O_W_ID,O_D_ID,O_C_ID,O_ID)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE OORDER ADD INDEX IDX_OORDER_PK ON (O_W_ID,O_D_ID,O_ID);
+-- Polypheny does not (yet) automatically create an index for unique constraints (like for instance PostgreSQL)
+ALTER TABLE OORDER ADD INDEX IDX_OORDER_UNIQUE ON (O_W_ID,O_D_ID,O_C_ID,O_ID);
 
 CREATE TABLE NEW_ORDER (
   NO_W_ID INT NOT NULL,
@@ -83,6 +94,8 @@ CREATE TABLE NEW_ORDER (
   NO_O_ID INT NOT NULL,
   PRIMARY KEY (NO_W_ID,NO_D_ID,NO_O_ID)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE NEW_ORDER ADD INDEX IDX_NEW_ORDER_PK ON (NO_W_ID,NO_D_ID,NO_O_ID);
 
 -- TODO: H_DATE ON UPDATE CURRENT_TIMESTAMP
 CREATE TABLE HISTORY (
@@ -96,6 +109,8 @@ CREATE TABLE HISTORY (
   H_DATA VARCHAR(24) NOT NULL,
   PRIMARY KEY (H_C_ID,H_C_D_ID,H_C_W_ID,H_D_ID,H_W_ID)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE HISTORY ADD INDEX IDX_HISTORY_PK ON (H_C_ID,H_C_D_ID,H_C_W_ID,H_D_ID,H_W_ID);
 
 CREATE TABLE ITEM (
   I_ID INT NOT NULL,
@@ -105,6 +120,8 @@ CREATE TABLE ITEM (
   I_IM_ID INT NOT NULL,
   PRIMARY KEY (I_ID)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE ITEM ADD INDEX IDX_ITEM_PK ON (I_ID);
 
 CREATE TABLE STOCK (
   S_W_ID INT NOT NULL,
@@ -126,6 +143,8 @@ CREATE TABLE STOCK (
   S_DIST_10 VARCHAR(24) NOT NULL,
   PRIMARY KEY (S_W_ID, S_I_ID)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE STOCK ADD INDEX IDX_STOCK_PK ON (S_W_ID, S_I_ID);
 
 CREATE TABLE ORDER_LINE (
   OL_W_ID INT NOT NULL,
@@ -140,6 +159,8 @@ CREATE TABLE ORDER_LINE (
   OL_DIST_INFO VARCHAR(24) NOT NULL,
   PRIMARY KEY (OL_W_ID,OL_D_ID,OL_O_ID,OL_NUMBER)
 );
+-- Polypheny does not (yet) automatically create an index for the primary key (like for instance PostgreSQL)
+ALTER TABLE ORDER_LINE ADD INDEX IDX_ORDER_LINE_PK ON (OL_W_ID,OL_D_ID,OL_O_ID,OL_NUMBER);
 
 ALTER TABLE CUSTOMER ADD CONSTRAINT C_FKEY_D FOREIGN KEY (C_W_ID, C_D_ID) REFERENCES DISTRICT (D_W_ID, D_ID) ON DELETE RESTRICT;
 ALTER TABLE DISTRICT ADD CONSTRAINT D_FKEY_W FOREIGN KEY (D_W_ID) REFERENCES WAREHOUSE (W_ID) ON DELETE RESTRICT;
