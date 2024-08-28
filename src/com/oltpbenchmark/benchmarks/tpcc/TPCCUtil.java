@@ -58,8 +58,8 @@ public class TPCCUtil {
 		c.c_phone = rs.getString("c_phone");
 		c.c_credit = rs.getString("c_credit");
 		c.c_credit_lim = rs.getFloat("c_credit_lim");
-		c.c_discount = rs.getFloat("c_discount");
-		c.c_balance = rs.getFloat("c_balance");
+		c.c_discount = rs.getBigDecimal("c_discount");
+		c.c_balance = rs.getBigDecimal("c_balance");
 		c.c_ytd_payment = rs.getFloat("c_ytd_payment");
 		c.c_payment_cnt = rs.getInt("c_payment_cnt");
 		c.c_since = rs.getTimestamp("c_since");

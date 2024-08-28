@@ -34,6 +34,7 @@ package com.oltpbenchmark.benchmarks.tpcc;
  *
  */
 
+import java.math.BigDecimal;
 import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -369,7 +370,7 @@ public class TPCCLoader extends Loader<TPCCBenchmark> {
 				district.d_ytd = 30000;
 
 				// random within [0.0000 .. 0.2000]
-				district.d_tax = (float) ((TPCCUtil.randomNumber(0, 2000, benchmark.rng())) / 10000.0);
+				district.d_tax = BigDecimal.valueOf(TPCCUtil.randomNumber(0, 2000, benchmark.rng())).divide( BigDecimal.valueOf( 10000 ) );
 
 				district.d_next_o_id = TPCCConfig.configCustPerDist + 1;
 				district.d_name = TPCCUtil.randomStr(TPCCUtil.randomNumber(6, 10, benchmark.rng()));
@@ -384,7 +385,7 @@ public class TPCCLoader extends Loader<TPCCBenchmark> {
 				distPrepStmt.setLong(idx++, district.d_w_id);
 				distPrepStmt.setLong(idx++, district.d_id);
 				distPrepStmt.setDouble(idx++, district.d_ytd);
-				distPrepStmt.setDouble(idx++, district.d_tax);
+				distPrepStmt.setBigDecimal(idx++, district.d_tax);
 				distPrepStmt.setLong(idx++, district.d_next_o_id);
 				distPrepStmt.setString(idx++, district.d_name);
 				distPrepStmt.setString(idx++, district.d_street_1);
@@ -428,7 +429,7 @@ public class TPCCLoader extends Loader<TPCCBenchmark> {
 					customer.c_w_id = w_id;
 
 					// discount is random between [0.0000 ... 0.5000]
-					customer.c_discount = (float) (TPCCUtil.randomNumber(1, 5000, benchmark.rng()) / 10000.0);
+					customer.c_discount = BigDecimal.valueOf(TPCCUtil.randomNumber(1, 5000, benchmark.rng())).divide( BigDecimal.valueOf( 10000 ) );
 
 					if (TPCCUtil.randomNumber(1, 100, benchmark.rng()) <= 10) {
 						customer.c_credit = "BC"; // 10% Bad Credit
@@ -443,7 +444,7 @@ public class TPCCLoader extends Loader<TPCCBenchmark> {
 					customer.c_first = TPCCUtil.randomStr(TPCCUtil.randomNumber(8, 16, benchmark.rng()));
 					customer.c_credit_lim = 50000;
 
-					customer.c_balance = -10;
+					customer.c_balance = BigDecimal.TEN.negate();
 					customer.c_ytd_payment = 10;
 					customer.c_payment_cnt = 1;
 					customer.c_delivery_cnt = 0;
@@ -475,12 +476,12 @@ public class TPCCLoader extends Loader<TPCCBenchmark> {
 					custPrepStmt.setLong(idx++, customer.c_w_id);
 					custPrepStmt.setLong(idx++, customer.c_d_id);
 					custPrepStmt.setLong(idx++, customer.c_id);
-					custPrepStmt.setDouble(idx++, customer.c_discount);
+					custPrepStmt.setBigDecimal(idx++, customer.c_discount);
 					custPrepStmt.setString(idx++, customer.c_credit);
 					custPrepStmt.setString(idx++, customer.c_last);
 					custPrepStmt.setString(idx++, customer.c_first);
 					custPrepStmt.setDouble(idx++, customer.c_credit_lim);
-					custPrepStmt.setDouble(idx++, customer.c_balance);
+					custPrepStmt.setBigDecimal(idx++, customer.c_balance);
 					custPrepStmt.setDouble(idx++, customer.c_ytd_payment);
 					custPrepStmt.setLong(idx++, customer.c_payment_cnt);
 					custPrepStmt.setLong(idx++, customer.c_delivery_cnt);
@@ -624,11 +625,11 @@ public class TPCCLoader extends Loader<TPCCBenchmark> {
 						        TPCCConfig.configItemCount, benchmark.rng());
 						if (order_line.ol_o_id < FIRST_UNPROCESSED_O_ID) {
 							order_line.ol_delivery_d = oorder.o_entry_d;
-							order_line.ol_amount = 0;
+							order_line.ol_amount = BigDecimal.ZERO;
 						} else {
 							order_line.ol_delivery_d = null;
 							// random within [0.01 .. 9,999.99]
-							order_line.ol_amount = (float) (TPCCUtil.randomNumber(1, 999999, benchmark.rng()) / 100.0);
+							order_line.ol_amount = BigDecimal.valueOf(TPCCUtil.randomNumber(1, 999999, benchmark.rng())).divide( BigDecimal.valueOf( 100 ) );
 						}
 						order_line.ol_supply_w_id = order_line.ol_w_id;
 						order_line.ol_quantity = 5;
@@ -646,7 +647,7 @@ public class TPCCLoader extends Loader<TPCCBenchmark> {
 			            } else {
 			                orlnPrepStmt.setNull(idx++, 0);
 			            }
-			            orlnPrepStmt.setDouble(idx++, order_line.ol_amount);
+			            orlnPrepStmt.setBigDecimal(idx++, order_line.ol_amount);
 			            orlnPrepStmt.setLong(idx++, order_line.ol_supply_w_id);
 			            orlnPrepStmt.setDouble(idx++, order_line.ol_quantity);
 			            orlnPrepStmt.setString(idx++, order_line.ol_dist_info);
