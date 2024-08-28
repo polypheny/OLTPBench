@@ -17,6 +17,7 @@
 
 package com.oltpbenchmark.benchmarks.tpcc.pojo;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class Customer {
@@ -27,9 +28,9 @@ public class Customer {
 	public int c_payment_cnt;
 	public int c_delivery_cnt;
 	public Timestamp c_since;
-	public float c_discount;
+	public BigDecimal c_discount;
 	public float c_credit_lim;
-	public float c_balance;
+	public BigDecimal c_balance;
 	public float c_ytd_payment;
 	public String c_credit;
 	public String c_last;

@@ -17,6 +17,7 @@
 
 package com.oltpbenchmark.benchmarks.tpcc.pojo;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class OrderLine {
@@ -29,7 +30,7 @@ public class OrderLine {
 	public int ol_supply_w_id;
 	public int ol_quantity;
 	public Timestamp ol_delivery_d;
-	public float ol_amount;
+	public BigDecimal ol_amount;
 	public String ol_dist_info;
 
 	@Override
