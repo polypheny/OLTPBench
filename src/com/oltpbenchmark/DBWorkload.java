@@ -62,12 +62,23 @@ public class DBWorkload {
     
     private static final String RATE_DISABLED = "disabled";
     private static final String RATE_UNLIMITED = "unlimited";
-    
+
+
+    public static void main( String[] args ) {
+        try {
+            main1( args );
+        } catch ( Throwable t ) {
+            LOG.error( t.getMessage(), t );
+            System.exit( 1 );
+        }
+    }
+
+
     /**
      * @param args
      * @throws Exception 
      */
-    public static void main(String[] args) throws Exception {
+    public static void main1(String[] args) throws Exception {
         // Initialize log4j
         String log4jPath = System.getProperty("log4j.configuration");
         if (log4jPath != null) {
