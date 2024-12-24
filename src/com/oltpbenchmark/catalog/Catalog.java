@@ -144,7 +144,7 @@ public final class Catalog {
         Map<String, Map<String, Pair<String, String>>> foreignKeys = new HashMap<String, Map<String,Pair<String,String>>>();
         
         DatabaseMetaData md = conn.getMetaData();
-        ResultSet table_rs = md.getTables(null, null, null, new String[]{"TABLE"});
+        ResultSet table_rs = md.getTables(null, null, null, new String[]{"TABLE", "ENTITY"});
         while (table_rs.next()) {
             if (LOG.isDebugEnabled()) LOG.debug(SQLUtil.debug(table_rs));
             String internal_table_name = table_rs.getString(3);
@@ -153,7 +153,7 @@ public final class Catalog {
             LOG.debug(String.format("ORIG:%s -> CATALOG:%s", internal_table_name, table_name));
             
             String table_type = table_rs.getString(4);
-            if (table_type.equalsIgnoreCase("TABLE") == false) continue;
+            if ( !table_type.equalsIgnoreCase( "TABLE" ) && !table_type.equalsIgnoreCase( "ENTITY" ) ) continue;
             Table catalog_tbl = new Table(table_name);
             
             // COLUMNS
