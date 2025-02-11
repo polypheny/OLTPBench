@@ -80,7 +80,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
         try {
             this.conn = this.benchmarkModule.makeConnection();
             this.conn.setAutoCommit(false);
-            
+
             // 2018-01-11: Since we want to support NoSQL systems 
             // that do not support txns, we will not invoke certain JDBC functions
             // that may cause an error in them.
@@ -122,7 +122,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
         return String.format("%s<%03d>",
                              this.getClass().getSimpleName(), this.getId());
     }
-    
+
     /**
      * Get the the total number of workers in this benchmark invocation
      */
@@ -356,7 +356,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
      * Called in a loop in the thread to exercise the system under test. Each
      * implementing worker should return the TransactionType handle that was
      * executed.
-     * 
+     *
      * @param llr
      */
     protected final TransactionType doWork(boolean measure, SubmittedProcedure pieceOfWork) {
@@ -406,7 +406,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                     } else {
                         this.conn.rollback();
                     }
-                    
+
                     status = TransactionStatus.USER_ABORTED;
                     break;
 
@@ -415,7 +415,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                     // TODO: Handle acceptable error codes for every DBMS
                      if (LOG.isDebugEnabled())
                         LOG.warn(String.format("%s thrown when executing '%s' on '%s' " +
-                                               "[Message='%s', ErrorCode='%d', SQLState='%s']", 
+                                               "[Message='%s', ErrorCode='%d', SQLState='%s']",
                                                ex.getClass().getSimpleName(), next, this.toString(),
                                                ex.getMessage(), ex.getErrorCode(), ex.getSQLState()), ex);
 
@@ -440,7 +440,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                         // MySQL Lock timeout
                         status = TransactionStatus.RETRY;
                         continue;
-                        
+
                     // ------------------
                     // SQL SERVER
                     // ------------------
@@ -448,7 +448,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                         // SQLServerException Deadlock
                         status = TransactionStatus.RETRY;
                         continue;
-                    
+
                     // ------------------
                     // POSTGRES
                     // ------------------
@@ -462,7 +462,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                     } else if (ex.getErrorCode() == 0 && ex.getSQLState() != null && ex.getSQLState().equals("XX000")) {
                         // Postgres no pinned buffers available
                         throw ex;
-                        
+
                     // ------------------
                     // ORACLE
                     // ------------------
@@ -470,7 +470,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                         // ORA-08177: Oracle Serialization
                         status = TransactionStatus.RETRY;
                         continue;
-                        
+
                     // ------------------
                     // DB2
                     // ------------------
@@ -491,6 +491,14 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                         status = TransactionStatus.RETRY_DIFFERENT;
                         continue;
 
+
+                    // ------------------
+                    // Polypheny
+                    // ------------------
+                    } else if (ex.getMessage().contains( "DeadlockException" ) || ex.getMessage().contains("Could not acquire lock") || ex.getMessage().contains("Write-write")) {
+                        // Polypheny Deadlock
+                        status = TransactionStatus.RETRY;
+                        continue;
                     // ------------------
                     // UNKNOWN!
                     // ------------------
@@ -509,11 +517,11 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                 } catch (Throwable ex) {
                     LOG.error("Fatal error when invoking " + next, ex);
                     throw new RuntimeException(ex);
-                    
+
                 } finally {
                      if (LOG.isDebugEnabled())
                         LOG.debug(String.format("%s %s Result: %s", this, next, status));
-                    
+
                     switch (status) {
                         case SUCCESS:
                             this.txnSuccess.put(next);
@@ -564,7 +572,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
 
     /**
      * Invoke a single transaction for the given TransactionType
-     * 
+     *
      * @param txnType
      * @return TODO
      * @throws UserAbortException
@@ -576,7 +584,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
 
     /**
      * Called at the end of the test to do any clean up that may be required.
-     * 
+     *
      * @param error
      *            TODO
      */
