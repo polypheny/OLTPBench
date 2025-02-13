@@ -495,7 +495,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                     // ------------------
                     // Polypheny
                     // ------------------
-                    } else if (ex.getMessage().contains( "DeadlockException" ) || ex.getMessage().contains("Could not acquire lock") || ex.getMessage().contains("Write-write")) {
+                    } else if (ex.getMessage().contains( "DeadlockException" ) || ex.getMessage().contains( "deadlock" ) || ex.getMessage().contains("Could not acquire lock") || ex.getMessage().contains("Write-write")) {
                         // Polypheny Deadlock
                         status = TransactionStatus.RETRY;
                         continue;
