@@ -329,7 +329,8 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                     // changed, otherwise we're recording results for a query
                     // that either started during the warmup phase or ended
                     // after the timer went off.
-                    if (preState == State.MEASURE && type != null && this.wrkldState.getCurrentPhase().id == phase.id) {
+                    Phase currentPhase = this.wrkldState.getCurrentPhase();
+                    if (preState == State.MEASURE && type != null && currentPhase != null && currentPhase.id == phase.id) {
                         latencies.addLatency(type.getId(), start, end, this.id, phase.id);
                         intervalRequests.incrementAndGet();
                     }
@@ -495,7 +496,7 @@ public abstract class Worker<T extends BenchmarkModule> implements Runnable {
                     // ------------------
                     // Polypheny
                     // ------------------
-                    } else if (ex.getMessage().contains( "DeadlockException" ) || ex.getMessage().contains( "deadlock" ) || ex.getMessage().contains("Could not acquire lock") || ex.getMessage().contains("Write-write")) {
+                    } else if (ex.getMessage().contains( "DeadlockException" ) || ex.getMessage().contains("Deadlock detected") || ex.getMessage().contains( "deadlock" ) || ex.getMessage().contains("Could not acquire lock") || ex.getMessage().contains("Write-write")) {
                         // Polypheny Deadlock
                         status = TransactionStatus.RETRY;
                         continue;
